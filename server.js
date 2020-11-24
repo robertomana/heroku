@@ -14,7 +14,7 @@ const cors = require('cors')
 
 
 /************************* gestione richieste HTTP ****************** */
-server.listen(PORT, function() {
+server.listen(process.env.PORT || PORT, function() {
     console.log("Server in ascolto sulla porta " + PORT);
     init();
 });
