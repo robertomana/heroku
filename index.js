@@ -4,21 +4,13 @@ const colors = require('colors');
 const express = require('express');
 const app = express()
 const server = http.createServer(app);
-const io = require('socket.io')(server);
-app.use(express.static('./static'));
+
 
 const PORT = 1337
 const fs = require('fs');
 const url = require('url');
 const bodyParser = require('body-parser');
 const cors = require('cors')
-
-let mongo = require("mongodb");
-let mongoClient = mongo.MongoClient;
-const ObjectId = mongo.ObjectId;
-//const CONNECTIONSTRING = "mongodb://127.0.0.1:27017";
-const CONNECTIONSTRING = "mongodb+srv://robertomana:Piper-125@cluster0.zzmgh.gcp.mongodb.net/<dbname>?retryWrites=true&w=majority"
-const CONNECTIONOPTIONS = { useNewUrlParser: true, useUnifiedTopology: true };
 
 
 /************************* gestione richieste HTTP ****************** */
@@ -74,39 +66,13 @@ app.use("/", function(req, res, next) {
 });
 
 
-// 7a - route per fare si che il server risponda a richieste anche extra-domain 
-app.use("/", function(req, res, next) {
-        res.setHeader("Access-Control-Allow-Origin", "*")
-        next()
-    })
-    // 7b - la precedente non sembra sufficiente. Raccomandata la seguente:
-app.use("/", cors())
-
-// 8 - dimensionamento della max dimensione di un JSON
-app.use("/", express.json({ limit: "50mb" }))
-    // oppure app.use("/", express.limit("50MB"));
-
-// 9 - per far sì che i json restituiti al client abbiano indentazione 4 chr 
-app.set("json spaces", 4)
 
 /* ************ */
 
 app.get("/api/unicorns", function(req, res, next) {
-    mongoClient.connect(CONNECTIONSTRING, CONNECTIONOPTIONS, function(err, client) {
-        if (err) {
-            res.status(503).send("Errore di connessione al DB");
-        } else {
-            let db = client.db("unicorns");
-            let collection = db.collection("unicorns");
-            collection.find({ "gender": "m" })
-                .toArray(function(err, data) {
-                    if (err)
-                        res.status(500).send("Errore esecuzione query");
-                    else
-                        res.send(data)
-                })
-        }
-    });
+   
+    res.send({"ris":"ok"})
+
 })
 
 /* ************ */
@@ -130,60 +96,3 @@ app.use('/', function(req, res, next) {
         res.send("Risorsa non trovata");
     } else res.send(paginaErrore);
 });
-
-
-/************************* gestione web socket ********************** */
-let users = [];
-io.on('connection', function(socket) {
-    let user = {};
-
-    // 1) ricezione username
-    socket.on('username', function(username) {
-        let item = users.find(function(item) {
-                return (item.username == username)
-            })
-            // se user esiste già
-        if (item != null) {
-            socket.emit("userNOK", "")
-            return;
-        }
-
-        user.username = username;
-        user.socket = this;
-        users.push(user);
-        log('User ' + colors.yellow(user.username) + " (sockID=" + user.socket.id + ') connected!');
-
-        if (user.username == "pippo" || user.username == "pluto")
-            this.join("room1")
-        else
-            this.join("room2")
-    });
-
-    // 2) ricezione di un messaggio	 
-    socket.on('message', function(data) {
-        log('User ' + colors.yellow(user.username) + " (sockID=" + user.socket.id + ') sent ' + colors.green(data));
-        let response = {
-                'from': user.username,
-                'message': data,
-                'date': new Date()
-            }
-            /* notifico a tutti i socket (compreso il mittente) il messaggio ricevuto
-            io.sockets.emit('notify_message', JSON.stringify(response)); */
-
-        if (user.username == "pippo" || user.username == "pluto")
-            io.to('room1').emit('notify_message', JSON.stringify(response));
-        else
-            io.to('room2').emit('notify_message', JSON.stringify(response));
-    });
-
-    // 3) user disconnected
-    socket.on('disconnect', function() {
-        log(' User ' + user.username + ' disconnected!');
-    });
-});
-
-
-// stampa i log con data e ora
-function log(data) {
-    console.log(colors.cyan("[" + new Date().toLocaleTimeString() + "]") + ": " + data);
-}
