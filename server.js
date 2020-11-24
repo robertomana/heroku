@@ -6,7 +6,7 @@ const app = express()
 const server = http.createServer(app);
 
 
-const PORT = 1337
+const PORT = 5000
 const fs = require('fs');
 const url = require('url');
 const bodyParser = require('body-parser');
