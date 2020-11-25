@@ -78,7 +78,7 @@ app.use("/", function(req, res, next) {
 /* ************ */
 
 app.get("/api/unicorns", function(req, res, next) {
-	/*
+	 
     mongoClient.connect(CONNECTIONSTRING, CONNECTIONOPTIONS, function(err, client) {
         if (err) {
             res.status(503).send("Errore di connessione al DB");
@@ -94,8 +94,8 @@ app.get("/api/unicorns", function(req, res, next) {
                 })
         }
     });
-	*/
-	res.send({"ris":"ok"})
+	 
+	// res.send({"ris":"ok"})
 })
 
 /* ************ */
