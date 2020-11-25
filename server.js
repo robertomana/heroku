@@ -25,7 +25,6 @@ server.listen(PORT, function() {
     init();
 });
 let paginaErrore = "";
-
 function init(req, res) {
     fs.readFile("./static/error.html", function(err, data) {
         if (!err)
@@ -120,14 +119,15 @@ app.use('/', function(req, res, next) {
 
 /************************* gestione web socket ********************** */
 let users = [];
+
 io.on('connection', function(socket) {
     let user = {};
 
     // 1) ricezione username
     socket.on('username', function(username) {
         let item = users.find(function(item) {
-                return (item.username == username)
-            })
+            return (item.username == username)
+        })
             // se user esiste già
         if (item != null) {
             socket.emit("userNOK", "")
