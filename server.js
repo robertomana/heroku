@@ -16,7 +16,6 @@ let mongo = require("mongodb");
 let mongoClient = mongo.MongoClient;
 const ObjectId = mongo.ObjectId;
 const CONNECTIONSTRING = process.env.MONGODB_URI ||  "mongodb://127.0.0.1:27017";
-console.log("------> " + CONNECTIONSTRING)
 const CONNECTIONOPTIONS = { useNewUrlParser: true, useUnifiedTopology: true };
 
 
