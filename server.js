@@ -15,8 +15,8 @@ const cors = require('cors')
 let mongo = require("mongodb");
 let mongoClient = mongo.MongoClient;
 const ObjectId = mongo.ObjectId;
-// const CONNECTIONSTRING = "mongodb://127.0.0.1:27017";
-const CONNECTIONSTRING = process.env.MONGODB_URI  
+const CONNECTIONSTRING = "mongodb://127.0.0.1:27017";
+// const CONNECTIONSTRING = process.env.MONGODB_URI  
 const CONNECTIONOPTIONS = { useNewUrlParser: true, useUnifiedTopology: true };
 
 
