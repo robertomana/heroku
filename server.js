@@ -4,11 +4,9 @@ const colors = require('colors');
 const express = require('express');
 const app = express()
 const server = http.createServer(app);
-// const io = require('socket.io')(server);
-const WebSocket = require('ws')
-const wss = new WebSocket.Server({ server });
+const io = require('socket.io')(server);
 
-const PORT = 1337
+const PORT = process.env.PORT || 1337
 const fs = require('fs');
 const url = require('url');
 const bodyParser = require('body-parser');
@@ -17,13 +15,13 @@ const cors = require('cors')
 let mongo = require("mongodb");
 let mongoClient = mongo.MongoClient;
 const ObjectId = mongo.ObjectId;
-const CONNECTIONSTRING = "mongodb://127.0.0.1:27017";
-// const CONNECTIONSTRING = process.env.MONGODB_URI  
+// const CONNECTIONSTRING = "mongodb://127.0.0.1:27017";
+const CONNECTIONSTRING = process.env.MONGODB_URI  
 const CONNECTIONOPTIONS = { useNewUrlParser: true, useUnifiedTopology: true };
 
 
 /************************* gestione richieste HTTP ****************** */
-server.listen(process.env.PORT || PORT, function() {
+server.listen(PORT, function() {
     console.log("Server in ascolto sulla porta " + PORT);
     init();
 });
@@ -123,7 +121,7 @@ app.use('/', function(req, res, next) {
 
 /************************* gestione web socket ********************** */
 let users = [];
-wss.on('connection', function(socket) {
+io.on('connection', function(socket) {
     let user = {};
 
     // 1) ricezione username
@@ -141,6 +139,11 @@ wss.on('connection', function(socket) {
         user.socket = this;
         users.push(user);
         log('User ' + colors.yellow(user.username) + " (sockID=" + user.socket.id + ') connected!');
+
+        if (user.username == "pippo" || user.username == "pluto")
+            this.join("room1")
+        else
+            this.join("room2")
     });
 
     // 2) ricezione di un messaggio	 
@@ -151,8 +154,13 @@ wss.on('connection', function(socket) {
                 'message': data,
                 'date': new Date()
             }
-            /* notifico a tutti i socket (compreso il mittente) il messaggio ricevuto */
-            // zzzzzzzzzzz io.sockets.emit('notify_message', JSON.stringify(response));  
+            /* notifico a tutti i socket (compreso il mittente) il messaggio ricevuto
+            io.sockets.emit('notify_message', JSON.stringify(response)); */
+
+        if (user.username == "pippo" || user.username == "pluto")
+            io.to('room1').emit('notify_message', JSON.stringify(response));
+        else
+            io.to('room2').emit('notify_message', JSON.stringify(response));
     });
 
     // 3) user disconnected
