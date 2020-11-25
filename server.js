@@ -6,11 +6,18 @@ const app = express()
 const server = http.createServer(app);
 
 
-const PORT = 5000
+const PORT = 1337
 const fs = require('fs');
 const url = require('url');
 const bodyParser = require('body-parser');
 const cors = require('cors')
+
+let mongo = require("mongodb");
+let mongoClient = mongo.MongoClient;
+const ObjectId = mongo.ObjectId;
+//const CONNECTIONSTRING = "mongodb://127.0.0.1:27017";
+const CONNECTIONSTRING = "mongodb+srv://robertomana:Piper-125@cluster0.zzmgh.gcp.mongodb.net/<dbname>?retryWrites=true&w=majority"
+const CONNECTIONOPTIONS = { useNewUrlParser: true, useUnifiedTopology: true };
 
 
 /************************* gestione richieste HTTP ****************** */
@@ -70,9 +77,21 @@ app.use("/", function(req, res, next) {
 /* ************ */
 
 app.get("/api/unicorns", function(req, res, next) {
-   
-    res.send({"ris":"ok"})
-
+    mongoClient.connect(CONNECTIONSTRING, CONNECTIONOPTIONS, function(err, client) {
+        if (err) {
+            res.status(503).send("Errore di connessione al DB");
+        } else {
+            let db = client.db("unicorns");
+            let collection = db.collection("unicorns");
+            collection.find({ "gender": "m" })
+                .toArray(function(err, data) {
+                    if (err)
+                        res.status(500).send("Errore esecuzione query");
+                    else
+                        res.send(data)
+                })
+        }
+    });
 })
 
 /* ************ */
