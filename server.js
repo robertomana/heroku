@@ -16,8 +16,8 @@ let mongo = require("mongodb");
 let mongoClient = mongo.MongoClient;
 const ObjectId = mongo.ObjectId;
 // const CONNECTIONSTRING = "mongodb://127.0.0.1:27017";
-// const CONNECTIONSTRING = process.env.MONGODB_URI ||
-const CONNECTIONSTRING = "mongodb+srv://robertomana:vallauri111@cluster0.zzmgh.gcp.mongodb.net/unicorns?retryWrites=true&w=majority"
+   const CONNECTIONSTRING = process.env.MONGODB_URI  
+// const CONNECTIONSTRING = "mongodb+srv://robertomana:vallauri111@cluster0.zzmgh.gcp.mongodb.net/unicorns?retryWrites=true&w=majority"
 const CONNECTIONOPTIONS = { useNewUrlParser: true, useUnifiedTopology: true };
 
 
