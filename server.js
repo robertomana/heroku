@@ -10,12 +10,11 @@ const PORT = process.env.PORT || 1337
 const fs = require('fs');
 const url = require('url');
 const bodyParser = require('body-parser');
-const cors = require('cors')
 
 let mongo = require("mongodb");
 let mongoClient = mongo.MongoClient;
 const ObjectId = mongo.ObjectId;
-const CONNECTIONSTRING = process.env.MONGODB_URI ||  "mongodb://127.0.0.1:27017";
+const CONNECTIONSTRING = process.env.MONGODB_URI || "mongodb://127.0.0.1:27017";
 const CONNECTIONOPTIONS = { useNewUrlParser: true, useUnifiedTopology: true };
 
 
@@ -25,6 +24,7 @@ server.listen(PORT, function() {
     init();
 });
 let paginaErrore = "";
+
 function init(req, res) {
     fs.readFile("./static/error.html", function(err, data) {
         if (!err)
@@ -75,7 +75,7 @@ app.use("/", function(req, res, next) {
 /* ************ */
 
 app.get("/api/unicorns", function(req, res, next) {
-	 
+
     mongoClient.connect(CONNECTIONSTRING, CONNECTIONOPTIONS, function(err, client) {
         if (err) {
             res.status(503).send("Errore di connessione al DB");
@@ -91,8 +91,8 @@ app.get("/api/unicorns", function(req, res, next) {
                 })
         }
     });
-	 
-	// res.send({"ris":"ok"})
+
+    // res.send({"ris":"ok"})
 })
 
 /* ************ */
@@ -126,8 +126,8 @@ io.on('connection', function(socket) {
     // 1) ricezione username
     socket.on('username', function(username) {
         let item = users.find(function(item) {
-            return (item.username == username)
-        })
+                return (item.username == username)
+            })
             // se user esiste già
         if (item != null) {
             socket.emit("userNOK", "")

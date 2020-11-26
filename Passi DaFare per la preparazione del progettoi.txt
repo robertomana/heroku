@@ -1,0 +1,29 @@
+ 
+ 
+ Partire dal server di EXPRESS e dalla cartella client di WEBSOCKET
+ 
+
+
+CLIENT: 
+  Aggiungere nella cartella client i files mancanti (libreria)
+ 
+  Aggiungere nell'html il link a libreria.js
+
+  Aggiungere un button UNICORNS
+
+  aggiungere codice di invioRichiesta
+
+ 
+
+
+SERVER: 
+  dopo "gestione richieste http" aggiungere "Gestione web socket" copiandola dai websocket
+
+  aggiungere in alto la libreria mancante relativa ai websocket
+
+  aggiungere una semplice GET route 
+
+
+
+ 
+ 
