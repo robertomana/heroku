@@ -1,4 +1,3 @@
 # Node build artifacts
 node_modules
-"Passi DaFare per la preparazione del progettoi.txt"
-connectionString.txt
+*.txt
