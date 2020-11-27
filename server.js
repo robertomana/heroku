@@ -75,7 +75,6 @@ app.use("/", function(req, res, next) {
 /* ************ */
 
 app.get("/api/unicorns", function(req, res, next) {
-
     mongoClient.connect(CONNECTIONSTRING, CONNECTIONOPTIONS, function(err, client) {
         if (err) {
             res.status(503).send("Errore di connessione al DB");
@@ -91,8 +90,24 @@ app.get("/api/unicorns", function(req, res, next) {
                 })
         }
     });
+})
 
-    // res.send({"ris":"ok"})
+app.post("/api/unicorns", function(req, res, next) {
+    mongoClient.connect(CONNECTIONSTRING, CONNECTIONOPTIONS, function(err, client) {
+        if (err) {
+            res.status(503).send("Errore di connessione al DB");
+        } else {
+            let db = client.db("unicorns");
+            let collection = db.collection("unicorns");
+            collection.find()
+                .toArray(function(err, data) {
+                    if (err)
+                        res.status(500).send("Errore esecuzione query");
+                    else
+                        res.send(data)
+                })
+        }
+    });
 })
 
 /* ************ */
