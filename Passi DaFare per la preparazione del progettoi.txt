@@ -1,8 +1,7 @@
  
  
- Partire dal server di EXPRESS e dalla cartella client di WEBSOCKET
+Partire dal server di EXPRESS e dalla cartella client di WEBSOCKET
  
-
 
 CLIENT: 
   Aggiungere nella cartella client i files mancanti (libreria)
@@ -14,7 +13,6 @@ CLIENT:
   aggiungere codice di invioRichiesta
 
  
-
 
 SERVER: 
   dopo "gestione richieste http" aggiungere "Gestione web socket" copiandola dai websocket
